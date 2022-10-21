@@ -1,57 +1,41 @@
 #include "lists.h"
-#include <string.h>
-#include <stdlib.h>
 
 /**
- * get_tail - traverses a linked list to get the last node
- *
- * @node: a pointer to a node in the list
- *
- * Return: the last node if any, else NULL
+ * add_node_end - adds a new node at the end
+ * of a list_t list.
+ * @head: head of the linked list.
+ * @str: string to store in the list.
+ * Return: address of the head.
  */
-list_t *get_tail(list_t *node)
-{
-	list_t *next;
 
-	if (node == NULL)
-		return (NULL);
-	next = get_tail(node->next);
-	if (next == NULL)
-		return (node);
-	return (next);
-}
-
-/**
- * add_node_end - adds a node to the end of a linked list
- *
- * @head: a pointer to a pointer to the head of the list 🙃
- *
- * @str: a string
- *
- * Return: pointer to new node
- */
 list_t *add_node_end(list_t **head, const char *str)
 {
-	unsigned int i;
-	list_t *node, *tail;
+	list_t *new_node, *current_node;
+	size_t n;
 
-	if (str == NULL)
-		i = 0;
-	else
-		for (i = 0; str[i]; i++)
-			continue;
-	node = (list_t *)malloc(sizeof(list_t));
-	if (node == NULL)
+	new_node = malloc(sizeof(list_t));
+	if (new_node == NULL)
 		return (NULL);
-	node->str = (str == NULL) ? NULL : strdup(str);
-	node->len = i;
-	node->next = NULL;
-	if (*head == NULL)
-		*head = node;
+
+	new_node->str = strdup(str);
+
+	for (n = 0; str[n]; n++)
+		;
+
+	new_node->len = n;
+	new_node->next = NULL;
+	current_node = *head;
+
+	if (current_node == NULL)
+	{
+		*head = new_node;
+	}
 	else
 	{
-		tail = get_tail(*head);
-		tail->next = node;
+		while (current_node->next != NULL)
+			current_node = current_node->next;
+		current_node->next = new_node;
 	}
-	return (node);
+
+	return (*head);
 }
